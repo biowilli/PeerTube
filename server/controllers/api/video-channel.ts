@@ -47,6 +47,7 @@ import {
 import { updateAvatarValidator, updateBannerValidator } from '../../middlewares/validators/actor-image'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
+import { VideoChannelSharedBetweenUserModel } from '../../models/user/videoChannelSharedBetweenUser'
 import { guessAdditionalAttributesFromQuery } from '../../models/video/formatter'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
@@ -284,7 +285,45 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
     await sequelizeTypescript.transaction(async t => {
       if (videoChannelInfoToUpdate.displayName !== undefined) videoChannelInstance.name = videoChannelInfoToUpdate.displayName
       if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.description = videoChannelInfoToUpdate.description
+      if (videoChannelInfoToUpdate.shareChannelBetweenUser !== undefined){
+        const updatedUserIds: number[] = videoChannelInfoToUpdate.shareChannelBetweenUser.map(Number);
 
+        // Fetch existing VideoChannelSharedBetweenUserModel entries for the current videoChannelInstance
+        const existingSharedUsers = await VideoChannelSharedBetweenUserModel.findAll({
+          where: {
+            videoChannelId: videoChannelInstance.id,
+          },
+        });
+
+        // Extract existing userIds from the fetched entries
+        const existingUserIds = existingSharedUsers.map((entry) => entry.userId);
+
+        // Find new and removed users
+        const newUsers = updatedUserIds.filter((userId) => !existingUserIds.includes(userId));
+        const removedUsers = existingUserIds.filter((userId) => !updatedUserIds.includes(userId));
+
+        // Create new VideoChannelSharedBetweenUserModel entries for new users
+        for (const userId of newUsers) {
+          await VideoChannelSharedBetweenUserModel.create(
+            {
+              userId,
+              videoChannelId: videoChannelInstance.id,
+              permission: 'default_permission',
+            },
+            { transaction: t }
+          );
+        }
+
+        if (removedUsers.length > 0) {
+          await VideoChannelSharedBetweenUserModel.destroy({
+            where: {
+              videoChannelId: videoChannelInstance.id,
+              userId: removedUsers,
+            },
+            transaction: t,
+          });
+        }
+      }
       if (videoChannelInfoToUpdate.support !== undefined) {
         const oldSupportField = videoChannelInstance.support
         videoChannelInstance.support = videoChannelInfoToUpdate.support

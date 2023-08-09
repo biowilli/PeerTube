@@ -4,5 +4,6 @@ export * from './select-checkbox-all.component'
 export * from './select-checkbox.component'
 export * from './select-custom-value.component'
 export * from './select-languages.component'
+export * from "./select-users.component";
 export * from './select-options.component'
 export * from './select-tags.component'

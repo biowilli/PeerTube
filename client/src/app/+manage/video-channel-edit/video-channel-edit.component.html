@@ -57,7 +57,25 @@
             {{ formErrors.description }}
           </div>
         </div>
-
+        <div class="form-group">
+          <label i18n for="shareChannelBetweenUser"
+            >Share Channel between Users</label
+          >
+          <my-help>
+            <ng-template ptTemplate="customHtml">
+              <ng-container i18n
+                >Same permisson as channel admin, but they can not change
+                permissions</ng-container
+              >
+            </ng-template>
+          </my-help>
+          <div>
+            <my-select-users
+              formControlName="shareChannelBetweenUser"
+              [maxUsers]="20"
+            ></my-select-users>
+          </div>
+        </div>
         <div class="form-group">
           <label i18n for="support">Support</label>
           <my-help

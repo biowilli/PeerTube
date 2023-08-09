@@ -1,0 +1,10 @@
+<my-select-checkbox-all
+  [(ngModel)]="selectedUsers"
+  (ngModelChange)="onModelChange()"
+  [availableItems]="availableUsers"
+  [maxItems]="maxUsers"
+  i18n-placeholder
+  placeholder="Add a new User"
+  [allGroupLabel]="allUserGroup"
+>
+</my-select-checkbox-all>

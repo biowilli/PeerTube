@@ -1,3 +1,4 @@
+import { VideoChannelSharedBetweenUserModel } from '@shared/models/users/videoChannelSharedBetweenUser.model'
 import { Account, ActorImage } from '../../actors'
 import { Actor } from '../../actors/actor.model'
 
@@ -9,6 +10,7 @@ export type ViewsPerDate = {
 export interface VideoChannel extends Actor {
   displayName: string
   description: string
+  shareChannelBetweenUser: VideoChannelSharedBetweenUserModel[]
   support: string
   isLocal: boolean
 

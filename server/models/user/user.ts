@@ -66,6 +66,7 @@ import { ActorImageModel } from '../actor/actor-image'
 import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getAdminUsersSort, throwIfNotValid } from '../shared'
 import { VideoModel } from '../video/video'
+import { VideoChannelSharedBetweenUserModel } from './videoChannelSharedBetweenUser'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
@@ -427,6 +428,15 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   })
   Account: AccountModel
 
+  @HasMany(() => VideoChannelSharedBetweenUserModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  videoChannelSharedBetweenUsers: VideoChannelSharedBetweenUserModel[]
+
   @HasOne(() => UserNotificationSettingModel, {
     foreignKey: 'userId',
     onDelete: 'cascade',
@@ -448,6 +458,15 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
   // Used if we already set an encrypted password in user model
   skipPasswordEncryption = false
+
+  @HasMany(() => VideoChannelSharedBetweenUserModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  VideoChannelSharedBetweenUsers: VideoChannelSharedBetweenUserModel[]
 
   @BeforeCreate
   @BeforeUpdate
@@ -951,7 +970,9 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
       lastLoginDate: this.lastLoginDate,
 
-      twoFactorEnabled: !!this.otpSecret
+      twoFactorEnabled: !!this.otpSecret,
+
+      VideoChannelSharedBetweenUserModel: this.videoChannelSharedBetweenUsers,
     }
 
     if (parameters.withAdminFlags) {

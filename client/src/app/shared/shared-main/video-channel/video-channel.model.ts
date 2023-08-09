@@ -1,11 +1,13 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
 import { Account as ServerAccount, ActorImage, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@shared/models'
 import { Actor } from '../account/actor.model'
+import { VideoChannelSharedBetweenUserModel } from '@shared/models/users/videoChannelSharedBetweenUser.model';
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
-  displayName: string
-  description: string
-  support: string
+  displayName: string;
+  description: string;
+  shareChannelBetweenUser: VideoChannelSharedBetweenUserModel[];
+  support: string;
 
   isLocal: boolean
 
@@ -56,9 +58,10 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   constructor (hash: Partial<ServerVideoChannel>) {
     super(hash)
 
-    this.displayName = hash.displayName
-    this.description = hash.description
-    this.support = hash.support
+    this.displayName = hash.displayName;
+    this.description = hash.description;
+    this.shareChannelBetweenUser = hash.shareChannelBetweenUser;
+    this.support = hash.support;
 
     this.banners = hash.banners || []
 

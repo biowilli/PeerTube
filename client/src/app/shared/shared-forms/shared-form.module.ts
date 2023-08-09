@@ -22,10 +22,12 @@ import {
   SelectCustomValueComponent,
   SelectLanguagesComponent,
   SelectOptionsComponent,
-  SelectTagsComponent
-} from './select'
+  SelectTagsComponent,
+  SelectUsersComponent,
+} from "./select";
 import { TextareaAutoResizeDirective } from './textarea-autoresize.directive'
 import { TimestampInputComponent } from './timestamp-input.component'
+import { UserAdminService } from '@app/shared/shared-users'
 
 @NgModule({
   imports: [
@@ -36,7 +38,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
     NgSelectModule,
 
     SharedMainModule,
-    SharedGlobalIconModule
+    SharedGlobalIconModule,
   ],
 
   declarations: [
@@ -56,6 +58,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectCheckboxComponent,
     SelectCustomValueComponent,
     SelectLanguagesComponent,
+    SelectUsersComponent,
     SelectCategoriesComponent,
     SelectCheckboxAllComponent,
 
@@ -87,6 +90,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectCheckboxComponent,
     SelectCustomValueComponent,
     SelectLanguagesComponent,
+    SelectUsersComponent,
     SelectCategoriesComponent,
     SelectCheckboxAllComponent,
 
@@ -97,7 +101,8 @@ import { TimestampInputComponent } from './timestamp-input.component'
 
   providers: [
     FormValidatorService,
-    FormReactiveService
+    FormReactiveService,
+    UserAdminService
   ]
 })
 export class SharedFormModule { }

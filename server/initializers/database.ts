@@ -58,6 +58,7 @@ import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
 import { VideoPasswordModel } from '@server/models/video/video-password'
+import { VideoChannelSharedBetweenUserModel } from '@server/models/user/videoChannelSharedBetweenUser'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -133,6 +134,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoModel,
     VideoChangeOwnershipModel,
     VideoChannelModel,
+    VideoChannelSharedBetweenUserModel,
     VideoShareModel,
     VideoFileModel,
     VideoSourceModel,

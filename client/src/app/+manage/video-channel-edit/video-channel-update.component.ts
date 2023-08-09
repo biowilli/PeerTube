@@ -7,6 +7,7 @@ import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
+  VIDEO_CHANNEL_SHARED_VALIDATOR,
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactiveService } from '@app/shared/shared-forms'
@@ -47,6 +48,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     this.buildForm({
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       'description': VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
+      'shareChannelBetweenUser': VIDEO_CHANNEL_SHARED_VALIDATOR,
       'support': VIDEO_CHANNEL_SUPPORT_VALIDATOR,
       'bulkVideosSupportUpdate': null
     })
@@ -62,10 +64,11 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
             this.hooks.runAction('action:video-channel-update.video-channel.loaded', 'video-channel', { videoChannel: this.videoChannel })
 
             this.oldSupportField = videoChannelToUpdate.support
-
+            console.log("shareChannelBetweenUser:", videoChannelToUpdate.shareChannelBetweenUser);
             this.form.patchValue({
               'display-name': videoChannelToUpdate.displayName,
               'description': videoChannelToUpdate.description,
+              'shareChannelBetweenUser': videoChannelToUpdate.shareChannelBetweenUser,
               'support': videoChannelToUpdate.support
             })
           },
@@ -89,9 +92,11 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     this.error = undefined
 
     const body = this.form.value
+
     const videoChannelUpdate: VideoChannelUpdate = {
       displayName: body['display-name'],
       description: body.description || null,
+      shareChannelBetweenUser: body["shareChannelBetweenUser"] || null,
       support: body.support || null,
       bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false
     }

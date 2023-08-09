@@ -1,7 +1,10 @@
-export interface VideoChannelUpdate {
-  displayName?: string
-  description?: string
-  support?: string
+import { VideoChannelSharedBetweenUserModel } from "@shared/models/users/videoChannelSharedBetweenUser.model";
 
-  bulkVideosSupportUpdate?: boolean
+export interface VideoChannelUpdate {
+  displayName?: string;
+  description?: string;
+  shareChannelBetweenUser?: string[];
+  support?: string;
+
+  bulkVideosSupportUpdate?: boolean;
 }

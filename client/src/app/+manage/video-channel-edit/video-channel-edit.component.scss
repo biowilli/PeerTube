@@ -9,7 +9,13 @@ my-actor-banner-edit {
   max-width: 500px;
 }
 
-input[type=text] {
+my-select-users {
+  width: 500px;
+  max-width: 500px;
+  display: inline-block;
+}
+
+input[type="text"] {
   @include peertube-input-text(340px);
 }
 

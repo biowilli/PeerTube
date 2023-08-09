@@ -57,6 +57,7 @@ import {
   throwIfNotValid
 } from '../shared'
 import { VideoModel } from './video'
+import { VideoChannelSharedBetweenUserModel } from '../user/videoChannelSharedBetweenUser' 
 import { VideoPlaylistModel } from './video-playlist'
 
 export enum ScopeNames {
@@ -420,6 +421,15 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     hooks: true
   })
   VideoPlaylists: VideoPlaylistModel[]
+
+  @HasMany(() => VideoChannelSharedBetweenUserModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  VideoChannelSharedBetweenUsers: VideoChannelSharedBetweenUserModel[]
 
   @AfterCreate
   static notifyCreate (channel: MChannel) {
@@ -807,10 +817,12 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     const totalViews = this.get('totalViews') as number
 
     const actor = this.Actor.toFormattedJSON()
+    //TODO SharedChannel
     const videoChannel = {
       id: this.id,
       displayName: this.getDisplayName(),
       description: this.description,
+      shareChannelBetweenUser: this.getSharedChannelUsers(),
       support: this.support,
       isLocal: this.Actor.isOwned(),
       updatedAt: this.updatedAt,
@@ -829,7 +841,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()
 
-    return Object.assign(actor, videoChannel)
+    return Object.assign(actor, videoChannel);
   }
 
   async toActivityPubObject (this: MChannelAP): Promise<ActivityPubActor> {
@@ -850,6 +862,13 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   // Avoid error when running this method on MAccount... | MChannel...
   getClientUrl (this: MAccountHost | MChannelHost) {
     return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier()
+  }
+
+  getSharedChannelUsers () {
+    //const videoChannelSharedBetweenUsers = this.VideoChannelSharedBetweenUsers;
+    console.log(this.VideoChannelSharedBetweenUsers);
+
+    return this.VideoChannelSharedBetweenUsers  // Accessing the related instances
   }
 
   getDisplayName () {

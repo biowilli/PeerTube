@@ -38,6 +38,17 @@ export const VIDEO_CHANNEL_DESCRIPTION_VALIDATOR: BuildFormValidator = {
   }
 }
 
+//TODO Besser angepasst auf Use case
+export const VIDEO_CHANNEL_SHARED_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [
+    Validators.minLength(1), 
+    Validators.maxLength(1000)],
+  MESSAGES: {
+    minlength: $localize`Share Channel between Users needs a value`,
+    maxlength: $localize`Share Channel between Users cannot be more than 1000 characters long.`,
+  },
+};
+
 export const VIDEO_CHANNEL_SUPPORT_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.minLength(3),
